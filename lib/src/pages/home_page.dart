@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:peliculas/src/providers/peliculas_provider.dart';
 import 'package:peliculas/src/widgets/card_swiper_widget.dart';
 import 'package:peliculas/src/widgets/movie_horizontal.dart';
@@ -9,6 +8,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    peliculasProvider.getPopulares();
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -65,14 +65,18 @@ class HomePage extends StatelessWidget {
               style: Theme.of(context).textTheme.subtitle1,
             ),
           ),
-          SizedBox(height: 5.0,),
-          FutureBuilder(
-            future: peliculasProvider.getPopulares(),
-            initialData: [],
+          SizedBox(
+            height: 5.0,
+          ),
+          StreamBuilder(
+            stream: peliculasProvider.popularesStream,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 print(snapshot.data.length);
-                return MovieHorizontal(peliculas: snapshot.data);
+                return MovieHorizontal(
+                  peliculas: snapshot.data,
+                  siguientePagina: peliculasProvider.getPopulares,
+                );
               } else {
                 return Container(
                   height: 400.0,
