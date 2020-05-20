@@ -117,7 +117,6 @@ class PeliculaDetalle extends StatelessWidget {
     final peliculasProvider = new PeliculasProvider();
     return FutureBuilder(
       future: peliculasProvider.getCast(pelicula.id.toString()),
-      initialData: [],
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         if (snapshot.hasData) {
           return _crearActoresPageView(context, snapshot.data);
